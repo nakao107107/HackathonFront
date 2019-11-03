@@ -42,7 +42,7 @@ export const actions = {
 
   async save ({dispatch, commit}, formData){
 
-    const {headers, data, error} = await this.$resource("https://dstn2.kumoko.club:443/dataspider/trigger/atevo").post('/create_right', formData)
+    const {headers, data, error} = await this.$resource("https://dstn2.kumoko.club:443/dataspider/trigger/atevo").post('/create', formData)
     //
     // if(data && data.error) {
     //   throw new ResourceError(data.error.code, data.error.message, data.error.detail)

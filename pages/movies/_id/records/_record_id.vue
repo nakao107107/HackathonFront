@@ -1,10 +1,13 @@
 <template>
-  <div>
-    {{record}}
-    {{movie}}
-    <audio :src="wavURL" controls></audio>
-    <video id="video" :src="movie.movie_url.value"></video>
-    <button class="聞いてみる"></button>
+  <div class="container">
+    <div>
+      {{this.url}}
+      <audio :src="this.url" controls></audio>
+      <video id="video" :src="movie.movie_url.value" class="w-100" muted></video>
+    </div>
+    <div>
+      <button class="btn btn-outline-primary" @click="play">聞いてみる</button>
+    </div>
   </div>
 </template>
 
@@ -17,7 +20,8 @@
     data(){
 
       return {
-        file: ''
+        file: '',
+        url: ''
       }
     },
 
@@ -32,14 +36,22 @@
 
     computed: {
       ...mapGetters('record/detail', ['record']),
-      ...mapGetters('movie/detail', ['movie'])
+      ...mapGetters('movie/detail', ['movie']),
     },
 
     methods: {
+
       wavURL(){
         const audioBlob = new Blob([this.file], { type: 'audio/wav' })
+        console.log(audioBlob)
         let url = window.URL.createObjectURL(audioBlob)
-        return url
+        this.url = url
+      },
+
+      play(){
+        this.wavURL()
+        document.getElementById("video").play();
+        // document.getElementById("audio").play();
       }
     }
 

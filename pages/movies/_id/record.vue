@@ -1,15 +1,29 @@
 <template>
   <div class="container">
-    <div>
-
-      <div>
+    <div class="row">
+      <div class="col-9">
         <audio id="audio" :src="this.audio_url" v-if="this.audio_url"></audio>
-        <video :src="movie.movie_url.value" width="600px" id="video" muted></video>
+        <video :src="movie.movie_url.value" width="100%" id="video" muted></video>
+        <div>
+          <button id="start" @click="startRecording" class="btn btn-primary">{{this.audio_url ? "取り直し" : "アテレコ開始"}}</button>
+          <button id="play" @click="play" v-if="this.audio_url" class="btn btn-primary">再生</button>
+          <button id="send" @click="showModal" v-if="this.audio_url" class="btn btn-primary">送信</button>
+
+          <b-modal ref="input-name-modal" hide-footer centered title="プレイヤー名を入力">
+            <div class="form-group">
+              <label for="">プレイヤー</label>
+              <input type="text" class="form-control" placeholder="プレイヤー1" v-model="user_name">
+            </div>
+            <div class="form-group">
+              <b-button class="mt-3" variant="outline-danger" @click="send">送信</b-button>
+            </div>
+          </b-modal>
+        </div>
       </div>
-      <p>{{movie.manuscript.value}}</p>
-      <button id="start" @click="startRecording" class="btn btn-primary">{{this.audio_url ? "取り直し" : "アテレコ開始"}}</button>
-      <button id="play" @click="play" v-if="this.audio_url" class="btn btn-primary">再生</button>
-      <button id="send" @click="send" v-if="this.audio_url" class="btn btn-primary">送信</button>
+      <div class="col-3 bg-light">
+        <h4 class="font-weight-bold">台詞</h4>
+        <p>{{movie.manuscript.value}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +50,7 @@ export default {
       audio_url2: '',
       audioBlob: {},
       audio_sample_rate: 0,
+      user_name: ''
     }
   },
 
@@ -46,6 +61,10 @@ export default {
   },
 
   methods: {
+
+    showModal() {
+      this.$refs['input-name-modal'].show()
+    },
 
     base64encode(text){
       return Buffer(text).toString("base64")
@@ -90,8 +109,6 @@ export default {
       // downloadLink.click();
       let dataview = this.exportWAV(this.audioData);
       let audioBlob = new Blob([dataview], { type: 'audio/wav' });
-      console.log(dataview)
-      console.log(audioBlob)
       this.audioBlob = audioBlob
 
       const myURL = window.URL || window.webkitURL
@@ -103,6 +120,7 @@ export default {
       let formData = new FormData();
       formData.append('input_sound', this.audioBlob);
       formData.append('movie_id', this.movie_id);
+      formData.append('user_name', this.user_name);
       this.$store.dispatch("record/detail/save", formData)
     },
 

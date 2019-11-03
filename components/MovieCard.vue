@@ -18,7 +18,13 @@
   export default {
     props: [
       'movie'
-    ]
+    ],
+
+    methods: {
+      goNextPage(id){
+        this.$router.push(`/movies/${id}`)
+      }
+    }
   }
 
 </script>

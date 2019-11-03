@@ -1,7 +1,12 @@
 <template>
   <div class="container">
     <video :src="movie.movie_url.value" width="100%" controls></video>
-    <h3>みんなのアフレコ</h3>
+    <div class="mb-4">
+      <h4 class="font-weight-bold">{{movie.title.value}}</h4>
+      <hr>
+      <p class="text-muted">{{movie.manuscript.value}}</p>
+    </div>
+    <h4 class="font-weight-bold">みんなのアフレコ</h4>
     <a :href="`/movies/${movie.$id.value}/record`" class="btn btn-primary">アフレコしてみる</a>
   </div>
 </template>
